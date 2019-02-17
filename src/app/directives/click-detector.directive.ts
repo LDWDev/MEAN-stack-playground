@@ -36,7 +36,7 @@ export class ClickDetectorDirective implements OnInit {
 
   public ngOnDestroy(): void {
     this.destroy$.next();
-    this.destroy$.unsubscribe();
+    this.destroy$.complete();
   }
 
   private clickEventCallback(o: MouseEvent): void {
