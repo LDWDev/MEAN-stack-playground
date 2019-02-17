@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { StreamHandler } from "src/app/models/stream-model";
+import { StreamHandler } from "src/app/services/stream-handler.service";
 
 @Component({
   selector: "app-contact",

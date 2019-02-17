@@ -2,10 +2,6 @@ import { TestBed, ComponentFixture } from "@angular/core/testing";
 import { ClickDetectorDirective } from "../click-detector.directive";
 import { Component, DebugElement } from "@angular/core";
 import { By } from "@angular/platform-browser";
-import { tick } from "@angular/core/src/render3";
-import { StreamHandler } from "src/app/models/stream-model";
-import { Stream } from "stream";
-
 @Component({
   selector: "click-detector-directive-test",
   template: `
@@ -125,7 +121,7 @@ describe("Directive subscription should be torn down on destroy", () => {
   beforeEach(() => {
     setup(true);
   });
-  it("should have a subscription until on destroy is called", () => {
+  it("should have a subscription until the surrounding test component is destroyed", () => {
     const directive = componentFixture.debugElement
       .query(By.directive(ClickDetectorDirective))
       .injector.get(ClickDetectorDirective);
@@ -134,7 +130,6 @@ describe("Directive subscription should be torn down on destroy", () => {
       expect(subscription.closed).toEqual(false);
     });
     componentFixture.destroy();
-    // directive.streams.ngOnDestroy();
     directive.streams.subscriptions.forEach(subscription => {
       expect(subscription.closed).toEqual(true);
     });

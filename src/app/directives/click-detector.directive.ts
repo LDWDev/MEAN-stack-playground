@@ -7,14 +7,17 @@ import {
   Input
 } from "@angular/core";
 import { fromEvent } from "rxjs";
-import { StreamHandler } from "../models/stream-model";
+import { StreamHandler } from "../services/stream-handler.service";
 
 @Directive({
   selector: "[clickDetector]",
   providers: [StreamHandler]
 })
 export class ClickDetectorDirective implements OnInit {
-  constructor(private el: ElementRef<HTMLElement>, public streams: StreamHandler) {
+  constructor(
+    private el: ElementRef<HTMLElement>,
+    public streams: StreamHandler
+  ) {
     this.clickedInOrOutside = new EventEmitter();
   }
 
