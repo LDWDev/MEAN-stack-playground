@@ -1,14 +1,14 @@
 import { Component, OnInit } from "@angular/core";
-import { StreamModel } from "src/app/models/stream-model";
+import { StreamHandler } from "src/app/models/stream-model";
 
 @Component({
   selector: "app-contact",
   templateUrl: "./contact.component.html",
   styleUrls: ["./contact.component.scss"],
-  providers: [StreamModel]
+  providers: [StreamHandler]
 })
 export class ContactComponent implements OnInit {
-  constructor(private streams: StreamModel) {}
+  constructor(private streams: StreamHandler) {}
 
   ngOnInit() {}
 }

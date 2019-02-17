@@ -3,7 +3,7 @@ import { ClickDetectorDirective } from "../click-detector.directive";
 import { Component, DebugElement } from "@angular/core";
 import { By } from "@angular/platform-browser";
 import { tick } from "@angular/core/src/render3";
-import { StreamModel } from "src/app/models/stream-model";
+import { StreamHandler } from "src/app/models/stream-model";
 import { Stream } from "stream";
 
 @Component({

@@ -7,14 +7,14 @@ import {
   Input
 } from "@angular/core";
 import { fromEvent } from "rxjs";
-import { StreamModel } from "../models/stream-model";
+import { StreamHandler } from "../models/stream-model";
 
 @Directive({
   selector: "[clickDetector]",
-  providers: [StreamModel]
+  providers: [StreamHandler]
 })
 export class ClickDetectorDirective implements OnInit {
-  constructor(private el: ElementRef<HTMLElement>, public streams: StreamModel) {
+  constructor(private el: ElementRef<HTMLElement>, public streams: StreamHandler) {
     this.clickedInOrOutside = new EventEmitter();
   }
 
@@ -24,7 +24,7 @@ export class ClickDetectorDirective implements OnInit {
   private _lastClickedElement: HTMLElement;
 
   public ngOnInit(): void {
-    this.streams.registerSubscription(fromEvent<MouseEvent>(window, "click"), o =>
+    this.streams.register(fromEvent<MouseEvent>(window, "click"), o =>
       this.clickEventCallback(o)
     );
   }
