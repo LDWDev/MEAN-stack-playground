@@ -17,8 +17,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {}
 
-  public process($event): void {
-    console.log("proc");
+  public processClickEvent($event): void {
     if ($event) {
       this.renderer.setStyle(
         this.el.nativeElement,
