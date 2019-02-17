@@ -67,6 +67,12 @@ describe("Directive: ClickDetectorDirective with EmitDistinctOnly = false", () =
     sibling.nativeElement.click();
     expect(component.process).toHaveBeenCalledWith(false);
   });
+  it("should fire two events on consecutive clicks", () => {
+    spyOn(component, "process");
+    sibling.nativeElement.click();
+    sibling.nativeElement.click();
+    expect(component.process).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe("Directive: ClickDetectorDirective with EmitDistinctOnly = true", () => {
