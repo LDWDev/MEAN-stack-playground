@@ -2,6 +2,9 @@ import { TestBed, ComponentFixture } from "@angular/core/testing";
 import { ClickDetectorDirective } from "../click-detector.directive";
 import { Component, DebugElement } from "@angular/core";
 import { By } from "@angular/platform-browser";
+import { tick } from "@angular/core/src/render3";
+import { StreamModel } from "src/app/models/stream-model";
+import { Stream } from "stream";
 
 @Component({
   selector: "click-detector-directive-test",
@@ -36,7 +39,7 @@ function setup(emitDistinctOnly: boolean) {
       ClickDetectorDirectiveTestingComponent,
       ClickDetectorDirective
     ]
-  });
+  }).compileComponents();
   componentFixture = TestBed.createComponent(
     ClickDetectorDirectiveTestingComponent
   );
@@ -122,13 +125,18 @@ describe("Directive subscription should be torn down on destroy", () => {
   beforeEach(() => {
     setup(true);
   });
-  it("should have a closed subscription on destroy", () => {
+  it("should have a subscription until on destroy is called", () => {
     const directive = componentFixture.debugElement
       .query(By.directive(ClickDetectorDirective))
       .injector.get(ClickDetectorDirective);
-    spyOn(component, "process");
-    directive.ngOnDestroy();
-    parent.nativeElement.click();
-    expect(component.process).toHaveBeenCalledTimes(0);
+
+    directive.streams.subscriptions.forEach(subscription => {
+      expect(subscription.closed).toEqual(false);
+    });
+    componentFixture.destroy();
+    // directive.streams.ngOnDestroy();
+    directive.streams.subscriptions.forEach(subscription => {
+      expect(subscription.closed).toEqual(true);
+    });
   });
 });

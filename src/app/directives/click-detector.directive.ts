@@ -6,37 +6,27 @@ import {
   EventEmitter,
   Input
 } from "@angular/core";
-import { Subject, Observable, fromEvent, Subscription } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { fromEvent } from "rxjs";
+import { StreamModel } from "../models/stream-model";
 
 @Directive({
-  selector: "[clickDetector]"
+  selector: "[clickDetector]",
+  providers: [StreamModel]
 })
 export class ClickDetectorDirective implements OnInit {
-  constructor(private el: ElementRef<HTMLElement>) {
-    this.click$ = fromEvent<MouseEvent>(window, "click").pipe(
-      takeUntil(this.destroy$)
-    );
+  constructor(private el: ElementRef<HTMLElement>, public streams: StreamModel) {
     this.clickedInOrOutside = new EventEmitter();
   }
 
   @Output() public clickedInOrOutside: EventEmitter<boolean>;
   @Input() public emitDistinctOnly: boolean;
 
-  private destroy$ = new Subject<boolean>();
-  private click$: Observable<MouseEvent>;
-  private clickSubscription: Subscription;
   private _lastClickedElement: HTMLElement;
 
   public ngOnInit(): void {
-    this.clickSubscription = this.click$.subscribe(o =>
+    this.streams.registerSubscription(fromEvent<MouseEvent>(window, "click"), o =>
       this.clickEventCallback(o)
     );
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   private clickEventCallback(o: MouseEvent): void {
