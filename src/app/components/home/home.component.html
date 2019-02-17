@@ -1,0 +1,10 @@
+<div class="parent" style="height: 200px; background-color: gray">
+    <div
+    #main
+      class="element"
+      clickDetector
+      [emitDistinctOnly]="emitDistinctOnly"
+      (clickedInOrOutside)="process($event)"
+    ></div>
+    <div class="sibling"></div>
+  </div>
