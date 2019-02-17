@@ -29,14 +29,14 @@ export class ClickDetectorDirective implements OnInit {
   private _lastClickedElement: HTMLElement;
 
   public ngOnInit(): void {
-    this.click$.subscribe(o => this.clickEventCallback(o));
+    this.clickSubscription = this.click$.subscribe(o =>
+      this.clickEventCallback(o)
+    );
   }
 
   public ngOnDestroy(): void {
-    console.log("completed?", this.clickSubscription.closed);
-    console.log("tearing down");
     this.destroy$.next();
-    console.log("completed?", this.clickSubscription.closed);
+    this.destroy$.unsubscribe();
   }
 
   private clickEventCallback(o: MouseEvent): void {

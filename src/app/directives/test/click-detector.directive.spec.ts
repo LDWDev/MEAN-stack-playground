@@ -55,19 +55,16 @@ describe("Directive: ClickDetectorDirective with EmitDistinctOnly = false", () =
 
   it("should return false on parent click", () => {
     spyOn(component, "process");
-    componentFixture.detectChanges();
     parent.nativeElement.click();
     expect(component.process).toHaveBeenCalledWith(false);
   });
   it("should return true on element click", () => {
     spyOn(component, "process");
-    componentFixture.detectChanges();
     element.nativeElement.click();
     expect(component.process).toHaveBeenCalledWith(true);
   });
   it("should return false on sibling click", () => {
     spyOn(component, "process");
-    componentFixture.detectChanges();
     sibling.nativeElement.click();
     expect(component.process).toHaveBeenCalledWith(false);
   });
@@ -92,7 +89,6 @@ describe("Directive: ClickDetectorDirective with EmitDistinctOnly = true", () =>
   });
   it("should call true then false on element and sibling clicks", () => {
     let spy = spyOn(component, "process");
-    componentFixture.detectChanges();
     element.nativeElement.click();
     expect(component.process).toHaveBeenCalledWith(true);
     spy.calls.reset();
@@ -106,7 +102,7 @@ describe("Directive: ClickDetectorDirective with changing EmitDistinctOnly from 
     setup(false);
   });
 
-  it("should should call twice then once on parent clicks when changing emit distinct only from false to true", () => {
+  it("should should call twice then once on parent clicks when changing EmitDistinctOnly from false to true", () => {
     let spy = spyOn(component, "process");
     parent.nativeElement.click();
     parent.nativeElement.click();
@@ -119,5 +115,20 @@ describe("Directive: ClickDetectorDirective with changing EmitDistinctOnly from 
     parent.nativeElement.click();
     parent.nativeElement.click();
     expect(component.process).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("Directive subscription should be torn down on destroy", () => {
+  beforeEach(() => {
+    setup(true);
+  });
+  it("should have a closed subscription on destroy", () => {
+    const directive = componentFixture.debugElement
+      .query(By.directive(ClickDetectorDirective))
+      .injector.get(ClickDetectorDirective);
+    spyOn(component, "process");
+    directive.ngOnDestroy();
+    parent.nativeElement.click();
+    expect(component.process).toHaveBeenCalledTimes(0);
   });
 });
